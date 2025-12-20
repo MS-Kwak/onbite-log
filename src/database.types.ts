@@ -47,6 +47,178 @@ export type Database = {
         }
         Relationships: []
       }
+      comments: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          liked_by: string[] | null
+          likes: number | null
+          marker_id: string
+          parent_id: string | null
+          reply_to_user_name: string | null
+          reported_by: string[] | null
+          reports: number | null
+          updated_at: string | null
+          user_avatar: string | null
+          user_id: string | null
+          user_name: string
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          liked_by?: string[] | null
+          likes?: number | null
+          marker_id: string
+          parent_id?: string | null
+          reply_to_user_name?: string | null
+          reported_by?: string[] | null
+          reports?: number | null
+          updated_at?: string | null
+          user_avatar?: string | null
+          user_id?: string | null
+          user_name: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          liked_by?: string[] | null
+          likes?: number | null
+          marker_id?: string
+          parent_id?: string | null
+          reply_to_user_name?: string | null
+          reported_by?: string[] | null
+          reports?: number | null
+          updated_at?: string | null
+          user_avatar?: string | null
+          user_id?: string | null
+          user_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      discussions: {
+        Row: {
+          category: string
+          content: string
+          created_at: string | null
+          id: string
+          liked_by: string[] | null
+          likes: number | null
+          parent_id: string | null
+          reply_to_user_name: string | null
+          reported_by: string[] | null
+          reports: number | null
+          updated_at: string | null
+          user_avatar: string | null
+          user_id: string
+          user_name: string
+        }
+        Insert: {
+          category: string
+          content: string
+          created_at?: string | null
+          id?: string
+          liked_by?: string[] | null
+          likes?: number | null
+          parent_id?: string | null
+          reply_to_user_name?: string | null
+          reported_by?: string[] | null
+          reports?: number | null
+          updated_at?: string | null
+          user_avatar?: string | null
+          user_id: string
+          user_name: string
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string | null
+          id?: string
+          liked_by?: string[] | null
+          likes?: number | null
+          parent_id?: string | null
+          reply_to_user_name?: string | null
+          reported_by?: string[] | null
+          reports?: number | null
+          updated_at?: string | null
+          user_avatar?: string | null
+          user_id?: string
+          user_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discussions_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "discussions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      location_requests: {
+        Row: {
+          address: string
+          category: string
+          created_at: string | null
+          description: string | null
+          id: string
+          lat: number | null
+          lng: number | null
+          location_name: string
+          map_id: string
+          phone: string
+          reject_reason: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string
+          user_name: string
+        }
+        Insert: {
+          address: string
+          category: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          lat?: number | null
+          lng?: number | null
+          location_name: string
+          map_id: string
+          phone: string
+          reject_reason?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id: string
+          user_name: string
+        }
+        Update: {
+          address?: string
+          category?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          lat?: number | null
+          lng?: number | null
+          location_name?: string
+          map_id?: string
+          phone?: string
+          reject_reason?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string
+          user_name?: string
+        }
+        Relationships: []
+      }
       logPost: {
         Row: {
           auth_id: string
@@ -71,6 +243,30 @@ export type Database = {
           id?: number
           img_urls?: string[] | null
           like_count?: number
+        }
+        Relationships: []
+      }
+      logProfile: {
+        Row: {
+          avatar_url: string | null
+          bio: string
+          created_at: string
+          id: string
+          nickname: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string
+          created_at?: string
+          id?: string
+          nickname?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string
+          created_at?: string
+          id?: string
+          nickname?: string
         }
         Relationships: []
       }
@@ -209,6 +405,7 @@ export type Database = {
           nickname: string | null
           provider: string | null
           provider_user_id: string | null
+          role: string | null
           updated_at: string | null
         }
         Insert: {
@@ -222,6 +419,7 @@ export type Database = {
           nickname?: string | null
           provider?: string | null
           provider_user_id?: string | null
+          role?: string | null
           updated_at?: string | null
         }
         Update: {
@@ -235,6 +433,7 @@ export type Database = {
           nickname?: string | null
           provider?: string | null
           provider_user_id?: string | null
+          role?: string | null
           updated_at?: string | null
         }
         Relationships: []
@@ -244,7 +443,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      report_comment: {
+        Args: { comment_id: string; reporter_id: string }
+        Returns: Json
+      }
+      report_discussion: {
+        Args: { discussion_id: string; reporter_id: string }
+        Returns: Json
+      }
+      toggle_discussion_like: {
+        Args: { discussion_id: string; user_id_param: string }
+        Returns: Json
+      }
+      toggle_like: {
+        Args: { comment_id: string; user_id_param: string }
+        Returns: Json
+      }
     }
     Enums: {
       [_ in never]: never
