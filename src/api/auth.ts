@@ -1,5 +1,5 @@
 import supabase from "@/lib/supabase";
-import type { Provider } from "@supabase/supabase-js";
+import type { EmailOtpType, Provider } from "@supabase/supabase-js";
 
 export async function signUp({
   email,
@@ -11,6 +11,25 @@ export async function signUp({
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
+  });
+
+  if (error) throw error;
+  return data;
+}
+
+export async function verifyOtp({
+  email,
+  token,
+  type,
+}: {
+  email: string;
+  token: string;
+  type: EmailOtpType;
+}) {
+  const { data, error } = await supabase.auth.verifyOtp({
+    email,
+    token,
+    type,
   });
 
   if (error) throw error;
