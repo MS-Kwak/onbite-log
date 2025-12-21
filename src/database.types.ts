@@ -221,7 +221,7 @@ export type Database = {
       }
       logPost: {
         Row: {
-          auth_id: string
+          author_id: string
           content: string
           created_at: string
           id: number
@@ -229,7 +229,7 @@ export type Database = {
           like_count: number
         }
         Insert: {
-          auth_id?: string
+          author_id?: string
           content?: string
           created_at?: string
           id?: number
@@ -237,14 +237,22 @@ export type Database = {
           like_count?: number
         }
         Update: {
-          auth_id?: string
+          author_id?: string
           content?: string
           created_at?: string
           id?: number
           img_urls?: string[] | null
           like_count?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "logPost_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "logProfile"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       logProfile: {
         Row: {
