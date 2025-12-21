@@ -10,7 +10,7 @@ export function useDeletePost(callbacks?: UseMutationCallback) {
       if (callbacks?.onSuccess) callbacks.onSuccess();
 
       if (deletedPost.img_urls && deletedPost.img_urls.length > 0) {
-        await deleteImagesInPath(`${deletedPost.auth_id}/${deletedPost.id}`);
+        await deleteImagesInPath(`${deletedPost.author_id}/${deletedPost.id}`);
       }
     },
     onError: (error) => {
@@ -18,4 +18,3 @@ export function useDeletePost(callbacks?: UseMutationCallback) {
     },
   });
 }
-
